@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Classroom - Practice Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .test-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-top: 6px solid #003366;
+            text-align: center;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .btn-enter {
+            background-color: #003366;
+            color: white;
+            transition: background-color 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-enter:hover {
+            background-color: #002244;
+        }
+
+        .btn-enter:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading .spinner {
+            display: inline-block;
+        }
+
+        #error-msg {
+            display: none;
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            border: 1px solid #fecaca;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="test-card mx-4">
+        <div class="mb-6">
+            <h2 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1">AP Classroom</h2>
+            <h1 class="text-2xl font-extrabold text-gray-900 leading-tight">
+                AP GOV/POLITICS PRACTICE TEST LAUNCHER
+            </h1>
+            <div class="h-px bg-gray-200 w-full my-6"></div>
+            <p class="text-gray-600 text-sm">
+                Ensure your browser allows pop-ups before entering the testing environment.
+            </p>
+        </div>
+
+        <button id="launch-btn" class="btn-enter w-full py-3 px-6 rounded font-bold text-sm flex items-center justify-center">
+            <div class="spinner"></div>
+            <span id="btn-text">ENTER TEST</span>
+        </button>
+
+        <div id="error-msg">
+            <strong>Action Required:</strong> Pop-up blocked. Please enable pop-ups for this site to launch the test.
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('launch-btn').addEventListener('click', async function() {
+            const btn = this;
+            const btnText = document.getElementById('btn-text');
+            const errorMsg = document.getElementById('error-msg');
+            const url = "https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/singlefile.html?t=" + Date.now();
+
+            // Setup loading UI
+            errorMsg.style.display = 'none';
+            btn.classList.add('loading');
+            btn.disabled = true;
+            btnText.textContent = "INITIALIZING...";
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Fetch failed');
+                
+                const content = await response.text();
+
+              /// Testing window ahhh
+                const newWin = window.open("about:blank", "_blank");
+                
+                if (newWin) {
+                    newWin.document.open();
+                    newWin.document.write(content);
+                    newWin.document.close();
+                } else {
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Launch error:', error);
+                btnText.textContent = "CONNECTION ERROR";
+                setTimeout(() => {
+                    btnText.textContent = "ENTER TEST";
+                }, 3000);
+            } finally {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+                if (btnText.textContent === "INITIALIZING...") {
+                    btnText.textContent = "ENTER TEST";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
