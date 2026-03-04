@@ -22,7 +22,7 @@
             border-radius: 8px;
             padding: 2.5rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            border-top: 6px solid #003366;
+            border-top: 6px solid #003366; 
             text-align: center;
             width: 100%;
             max-width: 450px;
@@ -98,6 +98,12 @@
         <div id="error-msg">
             <strong>Action Required:</strong> Pop-up blocked. Please enable pop-ups for this site to launch the test.
         </div>
+
+        <div class="mt-8 pt-4 border-t border-gray-100">
+            <p class="text-[10px] text-gray-400 uppercase tracking-widest font-semibold">
+                Created by Offensive Asian (https://youtube.com/@offensive-asian)
+            </p>
+        </div>
     </div>
 
     <script>
@@ -107,7 +113,6 @@
             const errorMsg = document.getElementById('error-msg');
             const url = "https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/singlefile.html?t=" + Date.now();
 
-            // Setup loading UI
             errorMsg.style.display = 'none';
             btn.classList.add('loading');
             btn.disabled = true;
@@ -118,8 +123,7 @@
                 if (!response.ok) throw new Error('Fetch failed');
                 
                 const content = await response.text();
-
-              /// Testing window ahhh
+                
                 const newWin = window.open("about:blank", "_blank");
                 
                 if (newWin) {
